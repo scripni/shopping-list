@@ -36,4 +36,4 @@ node_modules
 .data/
 
 # Bower packages
-bower_components/
+public/lib/

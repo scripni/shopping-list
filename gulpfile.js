@@ -59,6 +59,13 @@ gulp.task('serve', ['test'], function() {
     });
 });
 
+gulp.task('inject', () => {
+  const wiredep = require('wiredep').stream;
+  return gulp.src('./views/*.jade')
+    .pipe(wiredep(options))
+    .pipe(gulp.dest('./views'));
+});
+
 function log(msg) {
   plugins.util.log(msg);
 }
