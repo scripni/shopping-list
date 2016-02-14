@@ -1,9 +1,7 @@
 {
-  "server": {
-    "db": {
+  "rethinkdb": {
       "host": "localhost",
-      "port": 9090,
-      "dbName": "shopping-list"
-    }
+      "port": 28015,
+      "db": "grocery_list"
   }
 }

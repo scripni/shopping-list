@@ -13,11 +13,14 @@
     "express": "~4.13.1",
     "jade": "~1.11.0",
     "morgan": "~1.6.1",
+    "rethinkdb": "^2.2.1",
+    "rethinkdb-init": "0.0.5",
     "serve-favicon": "~2.3.0"
   },
   "devDependencies": {
     "gulp": "^3.9.0",
     "gulp-if": "^2.0.0",
+    "gulp-jscs": "^3.0.2",
     "gulp-jshint": "^2.0.0",
     "gulp-load-plugins": "^1.1.0",
     "gulp-mocha": "^2.2.0",

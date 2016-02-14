@@ -1,4 +1,3 @@
-/*jshint node:true*/
 'use strict';
 
 const gulp = require('gulp');
@@ -17,10 +16,10 @@ gulp.task('pre-commit', ['test']);
 
 // analyze code for potential issues
 gulp.task('vet', function() {
-  log('Performing code analysis using JSHint');
+  log('Performing code analysis');
   return gulp
     // analyze all js files
-    .src(['app.js', './routes/*.js', 'test/**/*.js'])
+    .src(['*.js', './routes/*.js', 'test/**/*.js'])
     // print processed files if verbose
     .pipe(plugins.if(args.verbose, plugins.print()))
     // analyze
@@ -28,7 +27,8 @@ gulp.task('vet', function() {
     // report
     .pipe(plugins.jshint.reporter('jshint-stylish', {verbose: true}))
     // fail task if code violations were found
-    .pipe(plugins.jshint.reporter('fail'));
+    .pipe(plugins.jshint.reporter('fail'))
+    .pipe(plugins.jscs());
 });
 
 // run mocha tests
@@ -41,7 +41,7 @@ gulp.task('test', ['vet'], function() {
 gulp.task('serve', ['test'], function() {
   var options = {
     script: './bin/www',
-    watch: ['./routes/*.js']
+    watch: ['routes']
   };
   return plugins.nodemon(options)
     .on('restart', ['test'], function(evt) {
