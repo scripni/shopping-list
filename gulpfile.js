@@ -38,10 +38,28 @@ gulp.task('test', ['vet'], function() {
     .pipe(plugins.mocha());
 });
 
-gulp.task('serve', ['test'], function() {
+// inject client-side dependencies in views
+gulp.task('inject', ['test'], () => {
+  const wiredep = require('wiredep').stream;
+  const wiredepOpts = {
+    ignorePath: '../public'
+  };
+  const injectSrc = gulp.src(
+    ['./public/css/*.css', './public/js/*.js'], {read: false});
+  const injectOpts = {
+    ignorePath: '/public'
+  };
+
+  return gulp.src('./views/*.jade')
+    .pipe(wiredep(wiredepOpts))
+    .pipe(plugins.inject(injectSrc, injectOpts))
+    .pipe(gulp.dest('./views'));
+});
+
+gulp.task('serve', ['test', 'inject'], function() {
   var options = {
     script: './bin/www',
-    watch: ['routes']
+    watch: ['test', 'routes']
   };
   return plugins.nodemon(options)
     .on('restart', ['test'], function(evt) {
@@ -57,14 +75,6 @@ gulp.task('serve', ['test'], function() {
     .on('exit', function() {
       log('nodemon exited');
     });
-});
-
-gulp.task('inject', ['test'], () => {
-  const wiredep = require('wiredep').stream;
-  
-  return gulp.src('./views/*.jade')
-    .pipe(wiredep())
-    .pipe(gulp.dest('./views'));
 });
 
 function log(msg) {
