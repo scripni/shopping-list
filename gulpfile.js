@@ -59,10 +59,11 @@ gulp.task('serve', ['test'], function() {
     });
 });
 
-gulp.task('inject', () => {
+gulp.task('inject', ['test'], () => {
   const wiredep = require('wiredep').stream;
+  
   return gulp.src('./views/*.jade')
-    .pipe(wiredep(options))
+    .pipe(wiredep())
     .pipe(gulp.dest('./views'));
 });
 
