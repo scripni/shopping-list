@@ -32,5 +32,8 @@ node_modules
 # Optional REPL history
 .node_repl_history
 
-#rethinkdb data dir
+# rethinkdb data dir
 .data/
+
+# Bower packages
+bower_components/
