@@ -15,7 +15,12 @@ gulp.task('help', plugins.taskListing);
 // ensure tests are passing before allowing git commit
 gulp.task('pre-commit', ['test']);
 
-const allJs = ['*.js', 'routes/**/*.js', 'test/**/*.js'];
+const allJs = [
+  '*.js',
+  'routes/**/*.js',
+  'test/**/*.js',
+  'services/**/*.js',
+  'public/js/**/*.js'];
 
 // analyze code for potential issues
 gulp.task('vet', () => {
@@ -61,7 +66,8 @@ gulp.task('inject', ['test'], () => {
     .pipe(gulp.dest('./views'));
 });
 
-const allSrc = _.concat(allJs, viewsSrc);
+const cssSrc = 'public/css/**/*.css';
+const allSrc = _.concat(allJs, viewsSrc, cssSrc);
 
 gulp.task('serve', ['test', 'inject'], () => {
   var options = {
