@@ -5,6 +5,7 @@ const gulp = require('gulp');
 const args = require('yargs').argv;
 // load all gulp modules in a 'plugin' object
 const plugins = require('gulp-load-plugins')({lazy: true});
+const _ = require('lodash');
 
 gulp.task('default', ['help']);
 
@@ -14,12 +15,14 @@ gulp.task('help', plugins.taskListing);
 // ensure tests are passing before allowing git commit
 gulp.task('pre-commit', ['test']);
 
+const allJs = ['*.js', 'routes/**/*.js', 'test/**/*.js'];
+
 // analyze code for potential issues
-gulp.task('vet', function() {
+gulp.task('vet', () => {
   log('Performing code analysis');
   return gulp
     // analyze all js files
-    .src(['*.js', './routes/*.js', 'test/**/*.js'])
+    .src(allJs)
     // print processed files if verbose
     .pipe(plugins.if(args.verbose, plugins.print()))
     // analyze
@@ -32,11 +35,13 @@ gulp.task('vet', function() {
 });
 
 // run mocha tests
-gulp.task('test', ['vet'], function() {
+gulp.task('test', ['vet'], () => {
   return gulp
     .src('./test/**/*.js')
     .pipe(plugins.mocha());
 });
+
+const viewsSrc = './views/*.jade';
 
 // inject client-side dependencies in views
 gulp.task('inject', ['test'], () => {
@@ -50,29 +55,35 @@ gulp.task('inject', ['test'], () => {
     ignorePath: '/public'
   };
 
-  return gulp.src('./views/*.jade')
+  return gulp.src(viewsSrc)
     .pipe(wiredep(wiredepOpts))
     .pipe(plugins.inject(injectSrc, injectOpts))
     .pipe(gulp.dest('./views'));
 });
 
-gulp.task('serve', ['test', 'inject'], function() {
+const allSrc = _.concat(allJs, viewsSrc);
+
+gulp.task('serve', ['test', 'inject'], () => {
   var options = {
+    delayTime: 1,
+    env: {
+      'PORT': 5000
+    },
     script: './bin/www',
-    watch: ['test', 'routes']
+    watch: [allSrc]
   };
   return plugins.nodemon(options)
-    .on('restart', ['test'], function(evt) {
+    .on('restart', ['test'], evt => {
       log('nodemon restarted');
       log('files changed:\n' + evt);
     })
-    .on('start', function() {
+    .on('start', () => {
       log('nodemon started');
     })
-    .on('crash', function() {
+    .on('crash', () => {
       log('nodemon crashed');
     })
-    .on('exit', function() {
+    .on('exit', () => {
       log('nodemon exited');
     });
 });
