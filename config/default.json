@@ -1,0 +1,9 @@
+{
+  "server": {
+    "db": {
+      "host": "localhost",
+      "port": 9090,
+      "dbName": "shopping-list"
+    }
+  }
+}
