@@ -79,7 +79,7 @@ gulp.task('serve', ['test', 'inject'], () => {
     watch: [allSrc]
   };
   return plugins.nodemon(options)
-    .on('restart', ['test'], evt => {
+    .on('restart', ['test', 'inject'], evt => {
       log('nodemon restarted');
       log('files changed:\n' + evt);
     })

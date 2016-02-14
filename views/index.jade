@@ -2,4 +2,11 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}
+  .input-group
+    input.form-control(type='text' placeholder='beer' autofocus)
+    span.input-group-btn
+      button.btn.btn-default(id='add-to-cart' type='button')
+        span.glyphicon.glyphicon-plus(aria-label='add to list')
+  ul.list-group
+    each item in cart
+      li.list-group-item= item
