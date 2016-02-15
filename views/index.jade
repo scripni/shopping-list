@@ -1,12 +1,18 @@
 extends layout
 
 block content
-  h1= title
-  .input-group
-    input.form-control(type='text' placeholder='beer' autofocus)
-    span.input-group-btn
-      button.btn.btn-default(id='add-to-cart' type='button')
-        span.glyphicon.glyphicon-plus(aria-label='add to list')
-  ul.list-group
-    each item in cart
-      li.list-group-item= item
+  div(ng-controller='homeCtrl')
+    h1= title
+    form.input-group(ng-submit='addToList(toAdd)')
+      input.form-control(
+        type='text',
+        placeholder='beer',
+        autofocus,
+        ng-model='toAdd')
+      span.input-group-btn
+        button.btn.btn-default(
+          id='add-to-cart',
+          type='submit')
+          span.glyphicon.glyphicon-plus(aria-label='add to list')
+    ul.list-group
+      li.list-group-item(ng-repeat='item in list.items') {{item.quantity}} of {{item.name}}

@@ -2,5 +2,8 @@
     "browser": true,
     "node": true,
     "esversion": 6,
-    "jquery": true
+    "jquery": true,
+    "globals": {
+      "angular": true
+    }
 }
